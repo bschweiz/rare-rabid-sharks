@@ -1,93 +1,68 @@
 import React, { useRef } from "react"
 import { Link, useHistory } from "react-router-dom"
-import "./Login.css"
+import "./Auth.css"
 
-export const Login = (props) => {
-  const email = useRef()
-  const password = useRef()
-  const existDialog = useRef()
-  const passwordDialog = useRef()
-  const history = useHistory()
 
-  const existingUserCheck = () => {
-    return fetch(`http://localhost:8088/users?email=${email.current.value}`)
-      .then((_) => _.json())
-      .then((user) => ("id" in user ? user : false))
-  }
+export const Login = () => {
+    const email = useRef()
+    const password = useRef()
+    const invalidDialog = useRef()
+    const history = useHistory()
 
-  const getall = () => {
-    return fetch(`http://localhost:8088/users`).then((res) =>
-      res.json().then((users) => console.log(users))
+    const handleLogin = (e) => {
+        e.preventDefault()
+
+        return fetch("http://127.0.0.1:8088/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                username: email.current.value,
+                password: password.current.value
+            })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if ("valid" in res && res.valid) {
+                    localStorage.setItem("rare_user_id", res.token )
+                    history.push("/")
+                }
+                else {
+                    invalidDialog.current.showModal()
+                }
+            })
+    }
+
+    return (
+        <main className="container--login">
+            <dialog className="dialog dialog--auth" ref={invalidDialog}>
+                <div>Email or password was not valid.</div>
+                <button className="button--close" onClick={e => invalidDialog.current.close()}>Close</button>
+            </dialog>
+            <section>
+                <form className="form--login" onSubmit={handleLogin}>
+                    <h1>Level Up</h1>
+                    <h2>Please sign in</h2>
+                    <fieldset>
+                        <label htmlFor="inputEmail"> Email address </label>
+                        <input ref={email} type="email" id="email" className="form-control" defaultValue="me@me.com" placeholder="Email address" required autoFocus />
+                    </fieldset>
+                    <fieldset>
+                        <label htmlFor="inputPassword"> Password </label>
+                        <input ref={password} type="password" id="password" className="form-control" defaultValue="me" placeholder="Password" required />
+                    </fieldset>
+                    <fieldset style={{
+                        textAlign:"center"
+                    }}>
+                        <button className="btn btn-1 btn-sep icon-send" type="submit">Sign In</button>
+                    </fieldset>
+                </form>
+            </section>
+            <section className="link--register">
+                <Link to="/register">Not a member yet?</Link>
+            </section>
+        </main>
     )
-  }
-
-  const handleLogin = (e) => {
-    e.preventDefault()
-    getall()
-    existingUserCheck().then((exists) => {
-      console.log(exists)
-      console.log(email)
-      console.log(password)
-      if (exists && exists.password === password.current.value) {
-        localStorage.setItem("rare_user_id", exists.id)
-        history.push("/")
-      } else if (exists && exists.password !== password.current.value) {
-        passwordDialog.current.showModal()
-      } else if (!exists) {
-        existDialog.current.showModal()
-      }
-    })
-  }
-
-  return (
-    <main className="container--login">
-      <dialog className="dialog dialog--auth" ref={existDialog}>
-        <div>User does not exist</div>
-        <button className="button--close" onClick={(e) => existDialog.current.close()}>
-          Close
-        </button>
-      </dialog>
-      <dialog className="dialog dialog--password" ref={passwordDialog}>
-        <div>Password does not match</div>
-        <button className="button--close" onClick={(e) => passwordDialog.current.close()}>
-          Close
-        </button>
-      </dialog>
-      <section>
-        <form className="form--login" onSubmit={handleLogin}>
-          <h1>Nashville Kennels</h1>
-          <h2>Please sign in</h2>
-          <fieldset>
-            <label htmlFor="inputEmail"> Email address </label>
-            <input
-              ref={email}
-              type="email"
-              id="email"
-              className="form-control"
-              placeholder="Email address"
-              required
-              autoFocus
-            />
-          </fieldset>
-          <fieldset>
-            <label htmlFor="inputPassword"> Password </label>
-            <input
-              ref={password}
-              type="password"
-              id="password"
-              className="form-control"
-              placeholder="Password"
-              required
-            />
-          </fieldset>
-          <fieldset>
-            <button type="submit">Sign in</button>
-          </fieldset>
-        </form>
-      </section>
-      <section className="link--register">
-        <Link to="/register">Not a member yet?</Link>
-      </section>
-    </main>
-  )
 }

@@ -25,9 +25,6 @@ export const Login = (props) => {
     e.preventDefault()
     getall()
     existingUserCheck().then((exists) => {
-      console.log(exists)
-      console.log(email)
-      console.log(password)
       if (exists && exists.password === password.current.value) {
         localStorage.setItem("rare_user_id", exists.id)
         history.push("/")

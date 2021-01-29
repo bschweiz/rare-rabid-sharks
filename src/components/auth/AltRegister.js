@@ -1,50 +1,71 @@
 import React, { useRef } from "react"
-import { Link, useHistory } from "react-router-dom"
-// import "./Auth.css"
+import { useHistory } from "react-router-dom"
+import "./Login.css"
 
 export const Register = (props) => {
+  const history = useHistory()
   const firstName = useRef()
   const lastName = useRef()
-  const email = useRef()
   const userName = useRef()
-  // const bio = useRef()
+  const email = useRef()
   const password = useRef()
   const verifyPassword = useRef()
   const passwordDialog = useRef()
+  const conflictDialog = useRef()
   const date = new Date()
   const milliDate = date.getTime()
-  const history = useHistory()
+
+  const getall = () => {
+    return fetch(`http://localhost:8088/users`).then((res) =>
+      res.json().then((users) => console.log(users))
+    )
+  }
+
+  const existingUserCheck = () => {
+    // If your json-server URL is different, please change it below!
+    return fetch(`http://localhost:8088/users?email=${email.current.value}`)
+      .then((_) => _.json())
+      .then((user) => ("id" in user ? user : false))
+  }
 
   const handleRegister = (e) => {
     e.preventDefault()
-    if (password.current.value === verifyPassword.current.value) {
-      const newUser = {
-        "username": email.current.value,
-        "first_name": firstName.current.value,
-        "last_name": lastName.current.value,
-        "email": email.current.value,
-        "password": password.current.value,
-        "bio": "",
-        "profile_image_url": "",
-        "created_on": milliDate,
-        "active": true,
-        "account_type_id": 2,
-      }
 
-      return fetch("http://localhost:8088/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-        body: JSON.stringify(newUser),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res)
-          if ("active" in res && res.active) {
-            localStorage.setItem("rare_user_id", res.token)
-            history.push("/")
+    if (password.current.value === verifyPassword.current.value) {
+      getall()
+      existingUserCheck()
+        .then((res) => console.log(res))
+        .then((userExists) => {
+          if (!userExists) {
+            // If your json-server URL is different, please change it below!
+            fetch("http://localhost:8088/users", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                "first_name": `${firstName.current.value}`,
+                "last_name": `${lastName.current.value}`,
+                "email": email.current.value,
+                "password": password.current.value,
+                "bio": "",
+                "username": `${userName.current.value}`,
+                "profile_image_url": "",
+                "created_on": milliDate,
+                "active": true,
+                "account_type_id": 2,
+              }),
+            })
+              .then((_) => _.json())
+              .then((createdUser) => {
+                if (createdUser.hasOwnProperty("id")) {
+                  // The user id is saved under the key app_user_id in local Storage. Change below if needed!
+                  localStorage.setItem("rare_user_id", createdUser.id)
+                  history.push("/")
+                }
+              })
+          } else {
+            conflictDialog.current.showModal()
           }
         })
     } else {
@@ -61,8 +82,15 @@ export const Register = (props) => {
         </button>
       </dialog>
 
+      <dialog className="dialog dialog--password" ref={conflictDialog}>
+        <div>Account with that email address already exists</div>
+        <button className="button--close" onClick={(e) => conflictDialog.current.close()}>
+          Close
+        </button>
+      </dialog>
+
       <form className="form--login" onSubmit={handleRegister}>
-        <h1 className="h3 mb-3 font-weight-normal">Register an account</h1>
+        <h1 className="h3 mb-3 font-weight-normal">Please Register for Application Name</h1>
         <fieldset>
           <label htmlFor="firstName"> First Name </label>
           <input
@@ -93,7 +121,7 @@ export const Register = (props) => {
             type="text"
             name="userName"
             className="form-control"
-            placeholder="User ame"
+            placeholder="user name"
             required
           />
         </fieldset>
@@ -130,19 +158,10 @@ export const Register = (props) => {
             required
           />
         </fieldset>
-        <fieldset
-          style={{
-            textAlign: "center",
-          }}
-        >
-          <button className="btn btn-1 btn-sep icon-send" type="submit">
-            Register
-          </button>
+        <fieldset>
+          <button type="submit"> Sign in </button>
         </fieldset>
       </form>
-      <section className="link--register">
-        Already registered? <Link to="/login">Login</Link>
-      </section>
     </main>
   )
 }

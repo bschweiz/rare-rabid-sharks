@@ -10,7 +10,7 @@ export const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault()
-
+    // POSTS to the server an object with email and pw. The checks the response and if the response property is valid the the user logs in and the rare_app)id is set to the user id.
     return fetch("http://127.0.0.1:8088/login", {
       method: "POST",
       headers: {

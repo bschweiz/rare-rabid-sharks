@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import { UserContext } from "./UserProvider"
-import { HumanDate } from "../utils/HumanDate"
 
 export const UserDetail = (props) => {
   const { getSingleUser } = useContext(UserContext)
@@ -19,7 +18,6 @@ export const UserDetail = (props) => {
     getSingleUser(userId).then(setUser)
   }, [])
 
-  console.log(active)
   return (
     <>
       <h3>
@@ -29,7 +27,7 @@ export const UserDetail = (props) => {
       <p>Username: {user.username}</p>
       <p>Email: {user.email}</p>
       <p>Password: {user.password}</p>
-      {/* <p>Account Type: {user.account_type.label}</p> */}
+      <p>Account Type: {!user.account_type ? "" : user.account_type.label}</p>
       <p>Bio: {user.bio}</p>
       <p>Activity Status: {active}</p>
       <p>

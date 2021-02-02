@@ -26,7 +26,8 @@ export const Register = (props) => {
         "bio": "",
         "username": username.current.value,
         "created_on": milliDate,
-        "profile_image_url": "",
+        "profile_image_url":
+          "https://images.squarespace-cdn.com/content/v1/5807cfe6d2b8571d8b68c144/1480515998589-7NL4LUSNIIFJUPX8Z4MV/ke17ZwdGBToddI8pDm48kIVI0NgIu4Hmb-wmFS-p3cd7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0gycmlYrUNOm5FlGNDjMZJj6f9OYfcuFirsLK_tEUBlhJZmhFslrvl1gsFu2VInYqA/Booker_JimScheurich_crop.jpg",
         "active": true,
         "account_type_id": 2,
       }

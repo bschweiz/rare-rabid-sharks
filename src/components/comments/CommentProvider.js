@@ -3,10 +3,11 @@ import React, {useState, useEffect} from "react"
 export const CommentContext = React.createContext()
 
 export const CommentProvider = (props) => {
-    const [comments,setComments] = useState([])
+    const [ comments, setComments ] = useState([])
+    const [ comment, setComment ] = useState({})
 
     const addComment = (comments) => {
-        return fetch("localhost:8088/commentss", {
+        return fetch("http://localhost:8088/comments", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -54,7 +55,7 @@ export const CommentProvider = (props) => {
     
     return(
         <CommentContext.Provider value={{
-            comments, addComment, getComments, getSingleComment, getCommentsByPostId, updateComment, deleteComment
+            comments, comment, addComment, getComments, getSingleComment, getCommentsByPostId, updateComment, deleteComment, setComments, setComment
         }}>
             {props.children}
         </CommentContext.Provider>

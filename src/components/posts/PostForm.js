@@ -10,6 +10,7 @@ const [formPost, setFormPost] = useState({})
 
 const editMode = props.match.params.hasOwnProperty("postId")
 
+
 const category = useRef(null)
 const title = useRef(null)
 const publication_date = useRef(null)

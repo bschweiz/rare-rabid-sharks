@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react"
 import { Route } from "react-router-dom"
 import { PostProvider } from "./posts/PostProvider"
@@ -13,6 +14,26 @@ import { PostForm } from "./posts/PostForm"
 import { UserProvider } from "./user/UserProvider"
 import { UserList } from "./user/UserList"
 import { UserDetail } from "./user/UserDetail"
+=======
+import React from "react";
+import { Route } from "react-router-dom";
+import { PostProvider } from "./posts/PostProvider";
+import { UserPostList } from "./posts/UserPostsList";
+import { CommentProvider } from "./comments/CommentProvider";
+import { CommentList } from "./comments/CommentList";
+import { AllPostList } from "./posts/AllPostList";
+import { PostDetail } from "./posts/PostDetail";
+import {
+  CategoryContext,
+  CategoryProvider,
+} from "./categories/CategoryProvider";
+import { CategoryList } from "./categories/CategoryList";
+import { CategoryForm } from "./categories/CategoryForm";
+import { PostForm } from "./posts/PostForm";
+import { TagProvider } from "./tags/TagProvider"
+import { TagForm } from "./tags/TagForm";
+import {TagList} from "./tags/TagList"
+>>>>>>> origin
 
 export const ApplicationViews = () => {
   return (
@@ -23,6 +44,7 @@ export const ApplicationViews = () => {
           lineHeight: "1.75rem",
         }}
       >
+        <TagProvider>
         <PostProvider>
           <UserProvider>
             <CategoryProvider>
@@ -45,6 +67,7 @@ export const ApplicationViews = () => {
                   render={(props) => <UserDetail {...props} />}
                 />
 
+<<<<<<< HEAD
                 <Route exact path="/categories" render={(props) => <CategoryList {...props} />} />
 
                 <Route
@@ -59,7 +82,36 @@ export const ApplicationViews = () => {
               </CommentProvider>
             </CategoryProvider>
           </UserProvider>
+=======
+              <Route
+                exact
+                path="/categories/create"
+                render={(props) => <CategoryForm {...props} />}
+              />
+              <Route
+                path="/categories/edit/:categoryId(\d+)"
+                render={(props) => <CategoryForm {...props} />}
+              />
+              <Route 
+                exact 
+                path="/tags" 
+                render={ (props) => <TagList {...props} />} 
+              />
+              <Route 
+                exact
+                path="/tags/create" 
+                render={ (props) => <TagForm {...props} />} 
+              />
+              <Route 
+                exact 
+                path="/tags/edit/:id(\d+)" 
+                render={ (props) => <TagForm {...props} />} 
+              /> 
+            </CommentProvider>
+          </CategoryProvider>
+>>>>>>> origin
         </PostProvider>
+    </TagProvider>
       </main>
     </>
   )

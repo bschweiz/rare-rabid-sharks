@@ -5,7 +5,6 @@ export const UserDetail = (props) => {
   const { getSingleUser } = useContext(UserContext)
   const userId = parseInt(props.match.params.userId)
   const [user, setUser] = useState({})
-  const userType = user.account_type
   const date = new Date(user.created_on)
   let active = ""
   if (user.active === 1) {
@@ -17,7 +16,6 @@ export const UserDetail = (props) => {
   useEffect(() => {
     getSingleUser(userId).then(setUser)
   }, [])
-
   return (
     <>
       <h3>

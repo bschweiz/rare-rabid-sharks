@@ -11,13 +11,15 @@ export const Post = ({post, props}) =>{
         return(
             
             <div className="posts">
-               <div>userid: {post.user_id}</div>
-                <div>category_id: {post.category_id}</div>
+                {/* <div>userid: {post.user_id}</div>
+                <div>category_id: {post.category_id}</div> */}
+                <h3>
+
                 <Link to={{
                     pathname: `/posts/${post.id}`,
                     state: { chosenPost: post }
-                }}>title: {post.title}</Link>
-                <div>publication_date: {<HumanDate date={Date(post.publication_date)} />}</div>
+                }}>{post.title}</Link></h3>
+                <div>Published On: {<HumanDate date={Date(post.publication_date)} />}</div>
                 <div>image_url: {post.image_url}</div>
                 <div>content: {post.content}</div>
                 <div>category: {post.category.label}</div>
@@ -25,10 +27,10 @@ export const Post = ({post, props}) =>{
                     pathname: `/posts/add_tags/${post.id}`,
                     state:{chosenPost: post}
                 }}>Add Tags</Link>
-                <Link to={{
+                {/* <Link to={{
                     pathname: `/posts/manage_tags/${post.id}`,
                     state:{chosenPost: post}
-                }}>Manage Tags</Link>
+                }}>Manage Tags</Link> */}
             </div>
         )
     }else{
